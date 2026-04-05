@@ -307,7 +307,19 @@ public:
    *
    * @param capacity Expected number of elements.
    */
-  virtual void reserve(size_t capacity) override { data.reserve(capacity); }
+  virtual void reserve(size_t capacity) override { 
+    try {
+      data.reserve(capacity); 
+    }
+    catch (const std::bad_alloc& e) {
+        throw std::runtime_error("Failed to reserve memory for " +
+                                 std::to_string(capacity) +
+                                 " elements: " + e.what());
+    } catch (const std::length_error& e) {
+        throw std::runtime_error("Requested capacity " + std::to_string(capacity) + 
+                                 " is too large for reserve(): " + e.what());
+    }
+  }
 
   /**
    * @brief (ASCII reading) Parse out the next value of this property from a list of tokens.
