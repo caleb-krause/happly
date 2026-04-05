@@ -312,12 +312,12 @@ public:
       data.reserve(capacity); 
     }
     catch (const std::bad_alloc& e) {
-        throw std::runtime_error("Failed to reserve memory for " +
-                                 std::to_string(capacity) +
-                                 " elements: " + e.what());
+      throw std::runtime_error("Failed to reserve memory for " +
+                               std::to_string(capacity) +
+                               " elements: " + e.what());
     } catch (const std::length_error& e) {
-        throw std::runtime_error("Requested capacity " + std::to_string(capacity) + 
-                                 " is too large for reserve(): " + e.what());
+      throw std::runtime_error("Requested capacity " + std::to_string(capacity) + 
+                               " is too large for reserve(): " + e.what());
     }
   }
 
