@@ -312,12 +312,12 @@ public:
       data.reserve(capacity); 
     }
     catch (const std::bad_alloc& e) {
-        throw std::runtime_error("Failed to reserve memory for " +
-                                 std::to_string(capacity) +
-                                 " elements: " + e.what());
+      throw std::runtime_error("Failed to reserve memory for " +
+                               std::to_string(capacity) +
+                               " elements: " + e.what());
     } catch (const std::length_error& e) {
-        throw std::runtime_error("Requested capacity " + std::to_string(capacity) + 
-                                 " is too large for reserve(): " + e.what());
+      throw std::runtime_error("Requested capacity " + std::to_string(capacity) + 
+                               " is too large for reserve(): " + e.what());
     }
   }
 
@@ -477,12 +477,12 @@ public:
       flattenedIndexStart.reserve(capacity + 1);
     }
     catch (const std::bad_alloc& e) {
-        throw std::runtime_error("Failed to reserve memory for " +
-                                 std::to_string(capacity) +
-                                 " elements: " + e.what());
+      throw std::runtime_error("Failed to reserve memory for " +
+                               std::to_string(capacity) +
+                               " elements: " + e.what());
     } catch (const std::length_error& e) {
-        throw std::runtime_error("Requested capacity " + std::to_string(capacity) + 
-                                 " is too large for reserve(): " + e.what());
+      throw std::runtime_error("Requested capacity " + std::to_string(capacity) + 
+                               " is too large for reserve(): " + e.what());
     }
   }
 
@@ -503,7 +503,14 @@ public:
 
     size_t currSize = flattenedData.size();
     size_t afterSize = currSize + count;
-    flattenedData.resize(afterSize);
+    try {
+      flattenedData.resize(afterSize);
+    }
+    catch (const std::bad_alloc& e) {
+      throw std::runtime_error("Failed to size to " + std::to_string(afterSize) + e.what());
+    } catch (const std::length_error& e) {
+      throw std::runtime_error("Failed to size to " + std::to_string(afterSize) + e.what());
+    }
     for (size_t iFlat = currSize; iFlat < afterSize; iFlat++) {
       std::istringstream iss(tokens[currEntry]);
       typename SerializeType<T>::type tmp; // usually the same type as T
