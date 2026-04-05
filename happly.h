@@ -316,6 +316,9 @@ public:
    * @param currEntry Index in to tokens, updated after this property is read.
    */
   virtual void parseNext(const std::vector<std::string>& tokens, size_t& currEntry) override {
+    if (currEntry >= tokens.size()) {
+      throw std::runtime_error("PLY parser: missing token for property");
+    }
     data.emplace_back();
     std::istringstream iss(tokens[currEntry]);
     typename SerializeType<T>::type tmp; // usually the same type as T
@@ -468,7 +471,9 @@ public:
    * @param currEntry Index in to tokens, updated after this property is read.
    */
   virtual void parseNext(const std::vector<std::string>& tokens, size_t& currEntry) override {
-
+    if (currEntry >= tokens.size()) {
+      throw std::runtime_error("PLY parser: missing token for property");
+    }
     std::istringstream iss(tokens[currEntry]);
     size_t count;
     iss >> count;
@@ -1860,10 +1865,6 @@ private:
         }
 
         vector<string> tokens = tokenSplit(line);
-        if (tokens.size() < elem.properties.size()) {
-          throw std::runtime_error("PLY parser: read " + std::to_string(tokens.size()) + 
-                                   " properties, expected " + std::to_string(elem.properties.size()));
-        }
         size_t iTok = 0;
         for (size_t iP = 0; iP < elem.properties.size(); iP++) {
           elem.properties[iP]->parseNext(tokens, iTok);
